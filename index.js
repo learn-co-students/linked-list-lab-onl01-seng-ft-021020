@@ -1,58 +1,54 @@
 function getName(node) {
-    return node["name"]
+    return node.name;
 }
 
-function headNode(linkedList, collection) {
+function next(node, collection){
+    let nextAddress = node.next
+    return collection[nextAddress]
+}
+
+function headNode(linkedList, collection){
     return collection[linkedList]
 }
 
-function next(head, collection) {
-    return headNode(head["next"], collection)
-}
-
-function nodeAt(index, linkedList, collection) {
-    let node = headNode(linkedList, collection)
-
-    for (let i = 0; i < index; i++) {
-        node = next(node, collection)
+function nodeAt(index, linkedList, collection){
+    let currentNode = headNode(linkedList, collection)
+    for(let i = 0; i < index; i++){
+        currentNode = next(currentNode, collection)
     }
-
-    return node
+    return currentNode
 }
 
-function addressAt(index, linkedList, collection) {
-    let address = linkedList
-
-    for (let i = 0; i < index; i++) {
-        address = nodeAt(i, address, collection)["next"]
+function indexAt(node, collection, linkedList){
+    let currentNode = headNode(linkedList, collection)
+    let currentIndex = 0
+    while(currentNode != node){
+        currentIndex++
+        currentNode = next(currentNode, collection)
     }
-
-    return address
+    return currentIndex
 }
 
-function indexAt(node, collection, linkedList) {
-    let i = 0
-
-    while (nodeAt(i, linkedList, collection) != node) {
-        i++
+function addressAt(index, linkedList, collection){
+    if(index == 0) {
+        return linkedList
+    } else {
+        let node = nodeAt(index-1, linkedList, collection)
+        return node.next
     }
-
-    return i
 }
 
-function insertNodeAt(index, address, linkedList, collection) {
-    // if index is 2
-    // node at index 1 will point to new address
-    // new node will point to what was at index 1
+function insertNodeAt(index, address, linkedList, collection){
     let newNode = collection[address];
 
-    newNode["next"] = addressAt(index, linkedList, collection)
+    newNode.next = addressAt(index, linkedList, collection)
 
-    nodeAt(index - 1, linkedList, collection)["next"] = address
+    nodeAt(index - 1, linkedList, collection).next = address
 }
 
-function deleteNodeAt(index, linkedList, collection) {
-    // if index is 2
-    // node at index 1 will point to address at index 3
-    nodeAt(index - 1, linkedList, collection).next = "asnan"
+function deleteNodeAt(index, linkedList, collection){
+    let previousNode = nodeAt(index - 1, linkedList, collection)
+    let currentNode = nodeAt(index, linkedList, collection)
+    previousNode.next = currentNode.next
+
 }
